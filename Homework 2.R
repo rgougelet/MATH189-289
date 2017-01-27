@@ -1,3 +1,5 @@
 getwd()
 
-data <- read.table("data.txt")
+data <- read.table("data.txt")\
+
+hist(car2)
