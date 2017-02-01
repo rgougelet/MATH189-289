@@ -1,6 +1,4 @@
 # read in data
-getwd()
-setwd("/Users/sidneybrowne/desktop/math 189/data")
 data <- read.table("videodata.txt", header = TRUE)
 
 library(car)
@@ -9,10 +7,13 @@ library(lattice)
 # identify all NA entries, were codded as "99" ----------------------
 data[data == 99] <- NA
 
+
 # scenario 2 --------------------------------------------------------
 ## check to see how the amnt of time spent playing games in the week 
 # prior to the survey compares to the reported frequency of play (daily,
 # weekly, etc)
+getwd()
+setwd("/Users/sidneybrowne/desktop/math 189/data")
 attach(data)
 # var name: time; meaning: number of hours played in the week prior to the survey
 summary(time)
@@ -73,5 +74,77 @@ hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1,2),
 hist(semesterly$time, probability = TRUE, breaks = c(0,.05,.95,1.05),
      xlim = c(0,2))
 
+# scenario 4 --------------------------------------------------------
+data <- read.table("videodata.txt", header = TRUE)
 
-    
+# identify all NA entries
+data[data == 99] <- NA
+#data$like[data$like == 1] <- NA #only one part never played
+
+# Factor data
+data$like <- recode(data$like, "1=5") # assume never played ~= not at all
+fact_like <- factor(data$like,labels = c("Very much","Somewhat", "Not Really", "Not at all"))
+factor(fact_like,ordered=TRUE)
+library(lattice)
+barchart(table(fact_like), horizontal=FALSE)
+
+#Chi squared test to see if not uniform
+chisq.test(table(fact_like),correct=TRUE) #correction for low sample size
+chisq.test(table(fact_like),correct=FALSE)
+
+#Binary split chi squared to see if not 50/50
+no_na <- data$like[!is.na(data$like)]
+bin_like <- factor(no_na < 4)
+chisq.test(table(bin_like),correct=TRUE) #correction for low sample size
+chisq.test(table(bin_like),correct=FALSE)
+
+#Parametric Z test
+z.prop = function(x){ # this function takes a binary variable, and tests against 50/50
+  x1 <- sum(x==TRUE)
+  x2 <- sum(x==FALSE)
+  n1 <- length(x)
+  n2 <- length(x)
+  numerator = (x1/n1) - (x2/n2)
+  p.common = (x1+x2) / (n1+n2)
+  denominator = sqrt(p.common * (1-p.common) * (1/n1 + 1/n2))
+  z.prop.ris = numerator / denominator
+  return(z.prop.ris)
+}
+z = z.prop(bin_like)
+2*pnorm(-abs(z))
+
+prop_like <- mean(as.logical(bin_like)*1)
+boot.population <- rep(as.logical(bin_like)*1, length.out = 314)
+length(boot.population)
+set.seed(1234)
+B = 5000 # the number of bootstrap samples we want
+boot.sample <- array(dim = c(B, 91))
+for (i in 1:B) {
+  boot.sample[i, ] <- sample(boot.population, size = 91, replace = FALSE)
+}
+
+# Z statistic
+boot.z <- apply(X = boot.sample, MARGIN = 1, FUN = z.prop)
+hist(boot.z, breaks = 20, probability = TRUE, density = 20, col = 3, border = 3)
+lines(density(boot.z, adjust = 2), col = 2)
+par(pty = 's')
+qqnorm(boot.z)
+qqline(boot.z)
+shapiro.test(boot.z)
+boot.zsd <- sd(boot.z)
+z + c(-1, 1)*1.96*boot.zsd
+
+# Sample mean
+library(PerformanceAnalytics)
+boot.mean <- apply(X = boot.sample, MARGIN = 1, FUN = mean)
+plot(ecdf(boot.mean))
+lines(ecdf(rnorm(10000,mean(boot.mean), StdDev(boot.mean))))
+head(boot.mean)
+hist(boot.mean, probability = TRUE, density = 20, col = 3, border = 3)
+lines(density(boot.mean, adjust = 2), col = 2)
+par(pty = 's')
+qqnorm(boot.mean)
+qqline(boot.mean)
+shapiro.test(boot.mean)
+boot.sd <- sd(boot.mean)
+prop_like + c(-1, 1)*1.96*boot.sd
