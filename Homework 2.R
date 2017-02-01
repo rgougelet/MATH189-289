@@ -13,6 +13,10 @@ data[data == 99] <- NA
 ## check to see how the amnt of time spent playing games in the week 
 # prior to the survey compares to the reported frequency of play (daily,
 # weekly, etc)
+### the percent in each group who did play a game conforms to the idea that 
+# more higher freq players played games that week.
+## the means for each freq group conform to the idea that higher freq players 
+# played for longer total amnounts of time that week.
 
 ## Q: how might the fact that there was an exam the week prior to the survey 
 # affect the estimates of scenario 1, and this comparason
@@ -47,6 +51,19 @@ daily.percent <- 1 - length(daily0.ind)/length(daily.ind) # 78%
 weekly.percent <- 1 - length(weekly0.ind)/length(weekly.ind) # 86%
 monthly.percent <- 1 - length(monthly0.ind)/length(monthly.ind) # 11%
 semesterly.percent <- 1 - length(semesterly0.ind)/length(semesterly.ind) # 4.3%
+
+## mean and std dev for time spent playing videogames by reported frequency
+daily.mean <- mean(daily$time) # 4.44
+daily.sd <- sd(daily$time) # 5.57
+
+weekly.mean <- mean(weekly$time) # 2.54
+weekly.sd <- sd(weekly$time) # 5.499
+
+monthly.mean <- mean(monthly$time) # .056
+monthly.sd <- sd(monthly$time) # .16
+
+semesterly.mean <- mean(semesterly$time) # .04
+semesterly.sd <- sd(semesterly$time) # .21
 
 ## histograms of hours played by reported frequency
 # break points tailored to best display data
