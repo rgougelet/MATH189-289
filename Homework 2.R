@@ -12,6 +12,7 @@ data[data == 99] <- NA
 ## check to see how the amnt of time spent playing games in the week 
 # prior to the survey compares to the reported frequency of play (daily,
 # weekly, etc)
+## 
 
 getwd()
 setwd("/Users/sidneybrowne/desktop/math 189/data")
@@ -182,39 +183,45 @@ prop_like + c(-1, 1)*1.96*boot.sd
 ## keep in mind the overall shape of the sample distribution. i.e. do a simulation study
 avg.time <- mean(data$time) # 1.24 hrs
 std.dev.time <- sd(data$time) # 3.78
-hist(data$time, probability = TRUE, breaks = c(0,1,2,3,4,5,13,14,29,30))
+hist(data$time, probability = TRUE, breaks = c(0,1,2,3,4,5,13,14,29,30),
+     main = "Histogram of time spent playing video games", xlab = "hours")
 lines(density(data$time), col = 2)
 
 # clearly not a normal distribution, suggests the use of bootstrap
 
 # generate a bootstrap population
-boot.pop <- rep(data$time, length.out = 314)
-B = 1000
-boot.sample <- array(dim = c(B,91))
+N = 314 # population size
+n = 91 # sample size
+boot.pop <- rep(data$time, length.out = N)
+B = 5000
+boot.sample <- array(dim = c(B,n))
 for(i in 1:B){
-  boot.sample[i, ] <- sample(boot.pop, size = 91, replace = FALSE)
+  boot.sample[i, ] <- sample(boot.pop, size = n, replace = FALSE)
 }
 boot.mean <- apply(X = boot.sample, MARGIN = 1, FUN = mean)
-std.dev.boot.mean <- sd(boot.mean) # .312 use this as the sd of the sample mean
-hist(boot.mean, probability = TRUE, breaks = 20)
+avg.boot.mean <- mean(boot.mean)
+std.dev.boot.mean <- sd(boot.mean) # use this as the sd of the sample mean
+hist(boot.mean, probability = TRUE, breaks = 20,
+     main = "Histogram of bootstrap sample means", xlab = "hours")
 lines(density(boot.mean), col = 2)
+lines(density())
 
 # is this normal?
-qqnorm(boot.mean)
+qqnorm(boot.mean, ylab = "bootstrap sample mean quantiles",
+       main = "Normal Q-Q Plot - bootstrap sample means")
 qqline(boot.mean, col = 2)
-shapiro.test(boot.mean) # p-value = 4.949e-06, W = 0.99055 
+# not using the shapiro test b/c it has a high chance of rejection for large sample size
+# it also tests against normality. i.e. H_0 = data is normal
+shapiro.test(boot.mean) # p-value = 1.596e-09, W = 0.99135 
 # sample mean is a good canidate for normal approx.
 
-# using a normal approx for a 95% CI
-CI95.norm <- avg.time + c(-1,1)*qnorm(.975)*std.dev.boot.mean # .631, 1.855
+# using a normal approx for a 95% CI for the mean, using the bootstrap mean and sd
+CI.95.norm <- avg.boot.mean + c(-1,1)*qnorm(.975)*std.dev.boot.mean  
 
-# using the student t approx for a 95% CI
-# investigate what the df should be, chose sample size (91) - 1
-CI95.t <- avg.time + c(-1,1)*qt(.975, df = 90)*std.dev.boot.mean # .623, 1.863
+# using the bootstrap distribution to get a 95% CI for the mean
+boot.mean.ord <- sort(boot.mean)
+CI.95.boot <- c(boot.mean.ord[floor(.025*B)], boot.mean.ord[ceiling(.975*B)])
 
-# using the bootstrap distribution to get a 95% CI
-CI95.boot <- quantile(boot.mean, probs = c(.025, .975)) # .59, 1.77
-
-# all three intervals are similar to each other (because the sample mean 
+# both intervals are similar to each other (because the sample mean 
 # was a good canidate for a normal approx) 
 
