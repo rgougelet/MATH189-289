@@ -182,7 +182,7 @@ prop_like + c(-1, 1)*1.96*boot.sd
 # in the week prior to the survey.
 ## keep in mind the overall shape of the sample distribution. i.e. do a simulation study
 avg.time <- mean(data$time) # 1.24 hrs
-std.dev.time <- sd(data$time) # 3.78
+std.dev.time <- sd(data$time) # 3.78 hrs
 hist(data$time, probability = TRUE, breaks = c(0,1,2,3,4,5,13,14,29,30),
      main = "Histogram of time spent playing video games", xlab = "hours")
 lines(density(data$time), col = 2)
@@ -210,17 +210,16 @@ lines(density())
 qqnorm(boot.mean, ylab = "bootstrap sample mean quantiles",
        main = "Normal Q-Q Plot - bootstrap sample means")
 qqline(boot.mean, col = 2)
-# not using the shapiro test b/c it has a high chance of rejection for large sample size
-# it also tests against normality. i.e. H_0 = data is normal
-shapiro.test(boot.mean) # p-value = 1.596e-09, W = 0.99135 
-# sample mean is a good canidate for normal approx.
 
 # using a normal approx for a 95% CI for the mean, using the bootstrap mean and sd
 CI.95.norm <- avg.boot.mean + c(-1,1)*qnorm(.975)*std.dev.boot.mean  
+CI.95.norm.width <- qnorm(.975)*std.dev.boot.mean
 
 # using the bootstrap distribution to get a 95% CI for the mean
 boot.mean.ord <- sort(boot.mean)
 CI.95.boot <- c(boot.mean.ord[floor(.025*B)], boot.mean.ord[ceiling(.975*B)])
+CI.95.boot.lowerwidth <- avg.boot.mean - boot.mean.ord[floor(.025*B)]
+CI.95.boot.upperwidth <- boot.mean.ord[ceiling(.975*B)] - avg.boot.mean
 
 # both intervals are similar to each other (because the sample mean 
 # was a good canidate for a normal approx) 
