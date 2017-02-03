@@ -9,14 +9,12 @@ data[data == 99] <- NA
 
 
 # scenario 2 --------------------------------------------------------
+setwd("/Users/sidneybrowne/desktop/math 189/data")
+
 ## check to see how the amnt of time spent playing games in the week 
 # prior to the survey compares to the reported frequency of play (daily,
 # weekly, etc)
 ## 
-
-getwd()
-setwd("/Users/sidneybrowne/desktop/math 189/data")
-
 ### the percent in each group who did play a game conforms to the idea that 
 # more higher freq players played games that week.
 ## the means for each freq group conform to the idea that higher freq players 
@@ -71,35 +69,26 @@ semesterly.sd <- sd(semesterly$time) # .21
 
 ## histograms of hours played by reported frequency
 # break points tailored to best display data
-histogram(~data$time|data$freq, breaks = c(0,.5,1.5,2.5,3.5,4.5,5.5,6,13.5,14.5,15,29.5,30))
-
-hist(daily$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14))
-rug(daily$time, col = 2, ticksize = .1)
-lines(density(daily$time, bw = .5))
-
-hist(weekly$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,29,30))
-rug(weekly$time, col = 2, ticksize = .1)
-lines(density(weekly$time, bw = .5))
-
-hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1,2))
-rug(monthly$time, col = 2, ticksize = .1)
-plot(density(monthly$time, bw = .05))
-
-hist(semesterly$time, probability = TRUE, breaks = c(0,.05,.95,1.05))
-rug(semesterly$time, col = 2, ticksize = .1)
-plot(density(semesterly$time, bw = .05))
-
-# using 'par' to hold histograms together
-par(mfcol = c(2,1))
 hist(daily$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14),
-     xlim = c(0,30))
+     xlim = c(0,30), main = "Histogram of video game time - daily players",
+     xlab = "hours")
+lines(density(daily$time, bw = .5), col = 2)
+
 hist(weekly$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,29,30),
-     xlim = c(0,30))
-par(mfcol = c(2,1))
-hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1,2),
-     xlim = c(0,2))
-hist(semesterly$time, probability = TRUE, breaks = c(0,.05,.95,1.05),
-     xlim = c(0,2))
+     xlim = c(0,30), main = "Histogram of video game time - weekly players",
+     xlab = "hours")
+lines(density(weekly$time, bw = .5), col = 2)
+
+hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1),
+     xlim = c(0,1), main = "Histogram of video game time - monthly players",
+     xlab = "hours")
+lines(density(monthly$time, bw = .05), col = 2)
+
+hist(semesterly$time, probability = TRUE, breaks = c(0,.1,.4,.5,.9,1),
+     xlim = c(0,1), main = "Histogram of video game time - semesterly players",
+     xlab = "hours")
+lines(density(semesterly$time, bw = .05), col = 2)
+
 
 # scenario 4 --------------------------------------------------------
 data <- read.table("videodata.txt", header = TRUE)
