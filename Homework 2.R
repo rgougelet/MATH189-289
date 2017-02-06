@@ -114,7 +114,7 @@ bin_like <- factor(no_na < 4)
 chisq.test(table(bin_like),correct=TRUE) #correction for low sample size
 chisq.test(table(bin_like),correct=FALSE)
 
-#Parametric Z test
+#Parametric Z test, assumes z is normally distributed
 z.prop = function(x){ # this function takes a binary variable, and tests against 50/50
   x1 <- sum(x==TRUE)
   x2 <- sum(x==FALSE)
@@ -126,9 +126,22 @@ z.prop = function(x){ # this function takes a binary variable, and tests against
   z.prop.ris = numerator / denominator
   return(z.prop.ris)
 }
-z = z.prop(bin_like)
-2*pnorm(-abs(z))
 
+z.prop2 = function(x){ # this function takes a binary variable, and tests against 50/50
+  x1 <- sum(x==TRUE)
+  x2 <- sum(x==FALSE)
+  n1 <- length(x)
+  n2 <- length(x)
+  numerator = (x1/n1) - (x2/n2)
+  p.common = (x1+x2) / (n1+n2)
+  denominator = sqrt(p.common * (1-p.common) * (1/n1 + 1/n2))
+  z.prop.ris = numerator / denominator
+  return(z.prop.ris)
+}
+z = z.prop(bin_like)
+2*pnorm(-abs(z)) # assumption is relevant here
+
+# Bootstrap
 prop_like <- mean(as.logical(bin_like)*1)
 boot.population <- rep(as.logical(bin_like)*1, length.out = 314)
 length(boot.population)
