@@ -91,6 +91,7 @@ lines(density(semesterly$time, bw = .05), col = 2)
 
 
 # scenario 4 --------------------------------------------------------
+setwd("C:\Users\Rob\Documents\MATH189-289")
 data <- read.table("videodata.txt", header = TRUE)
 
 # identify all NA entries
@@ -98,19 +99,28 @@ data[data == 99] <- NA
 #data$like[data$like == 1] <- NA #only one part never played
 
 # Factor data
+library(car)
 data$like <- recode(data$like, "1=5") # assume never played ~= not at all
 fact_like <- factor(data$like,labels = c("Very much","Somewhat", "Not Really", "Not at all"))
 factor(fact_like,ordered=TRUE)
 library(lattice)
-barchart(table(fact_like), horizontal=FALSE)
+barchart(table(fact_like), horizontal=FALSE,
+         main = "Preference for Video Games",
+         xlab = "Like", ylab = "Count")
 
 #Chi squared test to see if not uniform
 chisq.test(table(fact_like),correct=TRUE) #correction for low sample size
 chisq.test(table(fact_like),correct=FALSE)
 
-#Binary split chi squared to see if not 50/50
+#Binary split 
 no_na <- data$like[!is.na(data$like)]
-bin_like <- factor(no_na < 4)
+bin_like <- factor(no_na > 3)
+bin_like <- factor(bin_like, labels = c("Like", "Dislike"), ordered=FALSE)
+barchart(table(bin_like), horizontal=FALSE,
+         main = "Preference for Video Games",
+         xlab = "Preference", ylab = "Count")
+
+#chi squared to see if not 50/50
 chisq.test(table(bin_like),correct=TRUE) #correction for low sample size
 chisq.test(table(bin_like),correct=FALSE)
 
@@ -177,6 +187,27 @@ qqline(boot.mean)
 shapiro.test(boot.mean)
 boot.sd <- sd(boot.mean)
 prop_like + c(-1, 1)*1.96*boot.sd
+
+# Cross tabbing
+
+library(grid)
+library(gridExtra)
+like_data <- data
+like_data$like <- fact_like
+like_educ <- xtabs(~ like+educ, data=like_data)
+#colnames(like_educ) = c("blah","blah")
+like_educ
+grid.table(like_educ)
+aggregate(like ~ ., data=like_data, FUN=mean)
+
+bin_data <- data
+bin_data$bin <- fact_bin
+
+grid.table(aggregate(wt ~smoke, data=dat, FUN=mean))
+pairs(bin_like)
+fit <- lm(wt ~ ., data=dat)
+fit <- lm(gestation ~ ., data=dat)
+summary(fit) # show results
 
 
 # scenario 3 --------------------------------------------------------
