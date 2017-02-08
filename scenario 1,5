@@ -1,0 +1,139 @@
+getwd()
+data <- read.table("videodata.txt",header=TRUE)
+head(data)
+data[data==99] <-NA
+sum(is.na(data))
+attach(data)
+time
+time <-table(time)
+time
+summary(time)
+summary(data$time)
+a<-34/91
+N=314
+n=91
+error<-sqrt(a*(1-a))/(sqrt(n-1))*sqrt(N-n)/sqrt(N)
+left<-a-qnorm(.975)*error
+right<-a+qnorm(.975)*error
+time
+library(ggplot2)
+data$like<- as.factor(data$like)
+data$sex<-as.factor(data$sex)
+str(data)
+like<-table(like)
+like
+sex<-table(sex)
+sex
+levels(data$like)<-c("Never","Very Much","Somewhat","Not Really","Not at All")
+ggplot(data=subset(data,!is.na(like)), aes(x=like, fill=factor(sex)))+
+  geom_bar(width=.5)+
+  ggtitle("Male vs Female")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Like")+
+  ylab("Total")+
+  labs(fill="sex")
+str(data)
+extractlike<-function(like) {
+  if (length(grep("1",like))>0) {
+    return ("dislike")
+  } else if (length(grep("2",like))>0) {
+    return ("like")
+  } else if (length(grep("3",like))>0) {
+    return ("like")
+  } else if (length(grep("4",like))>0) {
+    return ("dislike")
+  } else if (length(grep("5",like))>0) {
+    return ("dislike")
+  } else {
+    return("dislike")
+  }
+    
+  }
+preference<-NULL
+for (i in 1:nrow(data)) {
+  preference<-c(preference, extractlike(data[i,"like"]))
+}
+data<-cbind(data,preference)
+data$preference<-as.factor(data$preference)
+preference<-table(preference)
+preference
+ggplot(data= subset(data,!is.na(preference)), aes(x=preference, fill=factor(sex)))+
+  geom_bar(width=0.5)+
+  xlab("Preference")+
+  ylab("Total")+
+  labs(fill="sex")
+women.like<-length(which[(data$sex==0) | (data$preference=="like")])
+
+ggplot(data=subset(data,!is.na(sex)), aes(x=sex, fill=preference))+
+  geom_bar(width=0.5)+
+  ggtitle("Male vs Female")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Sex")+
+  ylab("Total")+
+  labs(fill="preference")
+
+data$work[is.na(data$work)]<-0
+extractwork<-function(work) {
+  if (length(grep("0",work)>0)) {
+  return ("none")
+  } else {
+    return ("worked")
+  }
+}
+worked<-NULL
+for (i in 1:nrow(data)) {
+worked<-c(worked,extractwork(data[i,"work"]))
+}
+data<-cbind(data,worked)
+data$worked<-as.factor(data$worked)
+levels(data$sex)<-c("Female", "Male")
+ggplot(data, aes(x=worked, fill=preference))+
+  geom_bar(width=0.5)+
+  facet_wrap(~sex)+
+  xlab("Worked")+
+  ylab("Total")+
+  labs(fill="preference")
+data$own<-as.factor(data$own)
+levels(data$own)<-c("No", "Yes")
+ggplot(data=subset(data,!is.na(own)), aes(x=own, fill=preference))+
+  geom_bar(width=.5)+
+  facet_wrap(~sex)+
+  ggtitle("Owns a PC")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Own")+
+  ylab("Total")+
+  labs(fill="preference")
+levels(data$home)<-c("No", "Yes")
+data$home<-as.factor(data$home)
+ggplot(data=subset(data,!is.na(home)), aes(x=home, fill=preference))+
+  geom_bar(width=0.5)+
+  facet_wrap(~sex)+
+  ggtitle("Computer at Home")+
+theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Home")+
+  ylab("Total")+
+  labs(fill="preference")
+own<-table(own)
+own
+home<-table(home)
+home
+extractcomp<- function(home,own) {
+  if (length(grep("1",home))>0) {
+    return ("comp")
+  } else if (length(grep("1",own))>0) {
+    return ("comp")
+  } else if (length(grep("0",home))>0) {
+    return ("none")
+  } else if (length(grep("0",own))>0) {
+    return ("none")
+  } else {
+    return ("none")
+  }
+}
+
+ computer<-NULL
+ for (i in 1:nrow(data)) {
+ computer<-c(computer,extractcomp(data[i,"own"] & data[i,"home"]))  
+ }
+ data<-cbind(data,computer)
+ data$computer<-as.factor(data$computer)
