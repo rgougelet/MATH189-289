@@ -91,28 +91,66 @@ lines(density(semesterly$time, bw = .05), col = 2)
 
 
 # scenario 4 --------------------------------------------------------
-setwd("C:\Users\Rob\Documents\MATH189-289")
-data <- read.table("videodata.txt", header = TRUE)
 
-# identify all NA entries
-data[data == 99] <- NA
-#data$like[data$like == 1] <- NA #only one part never played
+import_data <- function(){
+  setwd("C:\\Users\\Rob\\Documents\\MATH189-289")
+  data <- read.table("videodata.txt", header = TRUE)
+  data[data == 99] <- NA
+  like_data <- data
+  like_data$like <- recode(like_data$like, "1=5") # assume never played ~= not at all
+  like_data$like <- factor(like_data$like,levels=c(2,3,4,5),labels = c("Very much","Somewhat", "Not Really", "Not at all"),ordered=TRUE)
+  like_data$where <- factor(recode(like_data$where,"1='Arcade';2='Home System';3='Home Computer';4='Arcade + Home Computer/System'
+                                   ;5='Home Computer/System';6='Arcade + Home Computer+System'"))
+  like_data$freq <- factor(recode(like_data$freq,"1='Daily';2='Weekly';3='Monthly';4='Semesterly'"))
+  like_data$busy <- factor(recode(like_data$busy,"1='Plays if busy';0='Doesnt play if busy'"))
+  like_data$educ <- factor(recode(like_data$educ,"1='Educational';0='Uneducational'"))
+  like_data$home <- factor(recode(like_data$home,"1='Has computer at home';0='Has no computer at home'"))
+  like_data$math <- factor(recode(like_data$math,"1='Hates Math';0='Likes Math'"))
+  like_data$own <- factor(recode(like_data$own,"1='Has PC';0='Doesnt have PC'"))
+  like_data$cdrom <- factor(recode(like_data$cdrom,"1='Has CDROM';0='Doesnt have CDROM'"))
+  like_data$email <- factor(recode(like_data$email,"1='Has email';0='Doesnt have email'"))
+  #like_data$grade <- factor(recode(like_data$grade,"1='Has PC';0='Doesnt have PC'"), levels = c(4,3,2,1,0), labels=c('A','B','C','D','F'), ordered=TRUE)
+  like_data$grade <- factor(recode(like_data$grade,"1='Has PC';0='Doesnt have PC'"), levels = c(0,1,2,3,4), labels=c('F','D','C','B','A'), ordered=FALSE)
+  like_data$sex <- factor(recode(like_data$sex,"1='Male';0='Female'"))
+  return(like_data)
+}
 
-# Factor data
-library(car)
-data$like <- recode(data$like, "1=5") # assume never played ~= not at all
-fact_like <- factor(data$like,labels = c("Very much","Somewhat", "Not Really", "Not at all"))
-factor(fact_like,ordered=TRUE)
+import_bin_data <- function(){
+  setwd("C:\\Users\\Rob\\Documents\\MATH189-289")
+  data <- read.table("videodata.txt", header = TRUE)
+  data[data == 99] <- NA
+  like_data <- data
+  library(car)
+  like_data$like <- recode(like_data$like, "1='Dislike';2='Like';3='Like';4='Dislike';5='Dislike'") # assume never played ~= not at all
+  like_data$like <- factor(like_data$like)
+  like_data$where <- factor(recode(like_data$where,"1='Arcade';2='Home System';3='Home Computer';4='Arcade + Home Computer/System'
+                                   ;5='Home Computer/System';6='Arcade + Home Computer+System'"))
+  like_data$freq <- factor(recode(like_data$freq,"1='Daily';2='Weekly';3='Monthly';4='Semesterly'"))
+  like_data$busy <- factor(recode(like_data$busy,"1='Plays if busy';0='Doesnt play if busy'"))
+  like_data$educ <- factor(recode(like_data$educ,"1='Educational';0='Uneducational'"))
+  like_data$home <- factor(recode(like_data$home,"1='Has computer at home';0='Has no computer at home'"))
+  like_data$math <- factor(recode(like_data$math,"1='Hates Math';0='Likes Math'"))
+  like_data$own <- factor(recode(like_data$own,"1='Has PC';0='Doesnt have PC'"))
+  like_data$cdrom <- factor(recode(like_data$cdrom,"1='Has CDROM';0='Doesnt have CDROM'"))
+  like_data$email <- factor(recode(like_data$email,"1='Has email';0='Doesnt have email'"))
+  #like_data$grade <- factor(recode(like_data$grade,"1='Has PC';0='Doesnt have PC'"), levels = c(4,3,2,1,0), labels=c('A','B','C','D','F'), ordered=TRUE)
+  like_data$grade <- factor(recode(like_data$grade,"1='Has PC';0='Doesnt have PC'"), levels = c(0,1,2,3,4), labels=c('F','D','C','B','A'), ordered=FALSE)
+  like_data$sex <- factor(recode(like_data$sex,"1='Male';0='Female'"))
+  return(like_data)
+}
+
+# Chi square tests -----
+# Bar chart
 library(lattice)
 barchart(table(fact_like), horizontal=FALSE,
          main = "Preference for Video Games",
          xlab = "Like", ylab = "Count")
 
-#Chi squared test to see if not uniform
+# Chi squared test to see if not uniform
 chisq.test(table(fact_like),correct=TRUE) #correction for low sample size
 chisq.test(table(fact_like),correct=FALSE)
 
-#Binary split 
+# Binary split 
 no_na <- data$like[!is.na(data$like)]
 bin_like <- factor(no_na > 3)
 bin_like <- factor(bin_like, labels = c("Like", "Dislike"), ordered=FALSE)
@@ -120,11 +158,11 @@ barchart(table(bin_like), horizontal=FALSE,
          main = "Preference for Video Games",
          xlab = "Preference", ylab = "Count")
 
-#chi squared to see if not 50/50
+# chi squared to see if not 50/50
 chisq.test(table(bin_like),correct=TRUE) #correction for low sample size
 chisq.test(table(bin_like),correct=FALSE)
 
-#Parametric Z test, assumes z is normally distributed
+# Parametric Z test, assumes z is normally distributed
 z.prop = function(x){ # this function takes a binary variable, and tests against 50/50
   x1 <- sum(x==TRUE)
   x2 <- sum(x==FALSE)
@@ -188,26 +226,106 @@ shapiro.test(boot.mean)
 boot.sd <- sd(boot.mean)
 prop_like + c(-1, 1)*1.96*boot.sd
 
-# Cross tabbing
 
-library(grid)
-library(gridExtra)
-like_data <- data
-like_data$like <- fact_like
-like_educ <- xtabs(~ like+educ, data=like_data)
-#colnames(like_educ) = c("blah","blah")
-like_educ
-grid.table(like_educ)
-aggregate(like ~ ., data=like_data, FUN=mean)
 
-bin_data <- data
-bin_data$bin <- fact_bin
 
-grid.table(aggregate(wt ~smoke, data=dat, FUN=mean))
-pairs(bin_like)
-fit <- lm(wt ~ ., data=dat)
-fit <- lm(gestation ~ ., data=dat)
-summary(fit) # show results
+
+# Cross tabbing categorical variables for 4 levels of like --------------------------------------------------------
+like_data <- import_data()
+
+#library(vcd)
+pdf("like_xtabs.pdf", height = 10, width = 15)
+like_educ = t(xtabs(~ like+educ, data=like_data, drop.unused.levels = TRUE))
+barplot(like_educ, beside=TRUE, legend=rownames(like_educ), xlab="Likes video games", ylab="Count")
+
+like_where = t(xtabs(~ like+where, data=like_data, drop.unused.levels = TRUE))
+barplot(like_where, beside=TRUE, legend=rownames(like_where), xlab="Likes video games", ylab="Count")
+
+like_freq = t(xtabs(~ like+freq, data=like_data, drop.unused.levels = TRUE))
+barplot(like_freq, beside=TRUE, legend=rownames(like_freq), xlab="Likes video games", ylab="Count")
+
+like_busy = t(xtabs(~ like+busy, data=like_data, drop.unused.levels = TRUE))
+barplot(like_busy, beside=TRUE, legend=rownames(like_busy), xlab="Likes video games", ylab="Count")
+
+like_educ = t(xtabs(~ like+educ, data=like_data, drop.unused.levels = TRUE))
+barplot(like_educ, beside=TRUE, legend=rownames(like_educ), xlab="Likes video games", ylab="Count")
+
+like_home = t(xtabs(~ like+home, data=like_data, drop.unused.levels = TRUE))
+barplot(like_home, beside=TRUE, legend=rownames(like_home), xlab="Likes video games", ylab="Count")
+
+like_math = t(xtabs(~ like+math, data=like_data, drop.unused.levels = TRUE))
+barplot(like_math, beside=TRUE, legend=rownames(like_math), xlab="Likes video games", ylab="Count")
+
+like_own = t(xtabs(~ like+own, data=like_data, drop.unused.levels = TRUE))
+barplot(like_own, beside=TRUE, legend=rownames(like_own), xlab="Likes video games", ylab="Count")
+
+like_cdrom = t(xtabs(~ like+cdrom, data=like_data, drop.unused.levels = TRUE))
+barplot(like_cdrom, beside=TRUE, legend=rownames(like_cdrom), xlab="Likes video games", ylab="Count")
+
+like_email = t(xtabs(~ like+email, data=like_data, drop.unused.levels = TRUE))
+barplot(like_email, beside=TRUE, legend=rownames(like_email), xlab="Likes video games", ylab="Count")
+
+like_grade = t(xtabs(~ like+grade, data=like_data, drop.unused.levels = TRUE))
+like_grade
+barplot(like_grade, legend=rownames(like_grade), xlab="Likes video games", ylab="Count")
+
+like_sex = t(xtabs(~ like+sex, data=like_data, drop.unused.levels = TRUE))
+barplot(like_sex, beside=TRUE, legend=rownames(like_sex), xlab="Likes video games", ylab="Count")
+dev.off()
+
+
+# Aggregate numerical data -----
+agg_data <- import_data
+aggregate(time~like, data=agg_data, FUN=mean)
+aggregate(age~like, data=agg_data, FUN=mean)
+aggregate(work~like, data=agg_data, FUN=mean)
+
+aggregate(time~like, data=agg_data, FUN=median)
+aggregate(age~like, data=agg_data, FUN=median)
+aggregate(work~like, data=agg_data, FUN=median)
+
+boxplot(time~like, data=agg_data)
+boxplot(age~like, data=agg_data)
+boxplot(work~like, data=agg_data)
+
+
+# Multinomial log regression ----
+multi_data <- import_data
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+apply(multi_data,2,pMiss)
+apply(multi_data,1,pMiss)
+
+library(mice)
+md.pattern(multi_data)
+tempData <- mice(multi_data,m=1,maxit=50,meth='pmm',seed=500)
+summary(tempData)
+completedData <- complete(tempData,1)
+
+library(nnet)
+test<-multinom(like ~ ., data=completedData)
+summary(test) # show results
+z <- summary(test)$coefficients/summary(test)$standard.errors
+p <- (1 - pnorm(abs(z), 0, 1))*2
+p
+
+exp(coef(test))
+
+
+
+# Binomial log regression ----
+bin_data <- import_bin_data()
+
+library(mice)
+md.pattern(bin_data)
+tempData <- mice(bin_data,m=1,maxit=50,meth='pmm',seed=500)
+summary(tempData)
+completedData <- complete(tempData,1)
+
+model <- glm(like ~ . + home:where ,family=binomial(link='logit'),data=completedData)
+summary(model)
+
+# grid.table(aggregate(wt ~smoke, data=dat, FUN=mean))
+# pairs(bin_like)
 
 
 # scenario 3 --------------------------------------------------------
