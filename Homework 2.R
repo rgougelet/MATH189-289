@@ -14,17 +14,16 @@ setwd("/Users/sidneybrowne/desktop/math 189/data")
 ## check to see how the amnt of time spent playing games in the week 
 # prior to the survey compares to the reported frequency of play (daily,
 # weekly, etc)
-## 
-### the percent in each group who did play a game conforms to the idea that 
-# more higher freq players played games that week.
-## the means for each freq group conform to the idea that higher freq players 
-# played for longer total amnounts of time that week.
 
 ## Q: how might the fact that there was an exam the week prior to the survey 
 # affect the estimates of scenario 1, and this comparason
 ### A: Because there were students in all reported frequencies of play who 
 # played 0 hours the week prior to the survey it is likley that the exam caused 
 # students to play less or not at all
+### the percent in each group who did play a game conforms to the idea that 
+# more higher freq players played games that week.
+## the means for each freq group conform to the idea that higher freq players 
+# played for longer total amnounts of time that week.
 
 attach(data)
 # var name: time; meaning: number of hours played in the week prior to the survey
@@ -42,6 +41,28 @@ monthly.ind <- which(data['freq'] == 'monthly')
 monthly <- data[monthly.ind, ]
 semesterly.ind <- which(data['freq'] == 'semesterly')
 semesterly <- data[semesterly.ind, ]
+
+## histograms of hours played by reported frequency
+# break points tailored to best display data
+hist(daily$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14),
+     xlim = c(0,30), main = "Histogram of video game time - daily players",
+     xlab = "hours")
+lines(density(daily$time, bw = .5), col = 2)
+
+hist(weekly$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,29,30),
+     xlim = c(0,30), main = "Histogram of video game time - weekly players",
+     xlab = "hours")
+lines(density(weekly$time, bw = .5), col = 2)
+
+hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1),
+     xlim = c(0,1), main = "Histogram of video game time - monthly players",
+     xlab = "hours")
+lines(density(monthly$time, bw = .05), col = 2)
+
+hist(semesterly$time, probability = TRUE, breaks = c(0,.1,.4,.5,.9,1),
+     xlim = c(0,1), main = "Histogram of video game time - semesterly players",
+     xlab = "hours")
+lines(density(semesterly$time, bw = .05), col = 2)
 
 ## percent who played a videogame in the week prior to the survey by reported frequency
 daily0.ind <- which(daily['time'] == 0.0)
@@ -67,27 +88,123 @@ monthly.sd <- sd(monthly$time) # .16
 semesterly.mean <- mean(semesterly$time) # .04
 semesterly.sd <- sd(semesterly$time) # .21
 
-## histograms of hours played by reported frequency
-# break points tailored to best display data
-hist(daily$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14),
-     xlim = c(0,30), main = "Histogram of video game time - daily players",
-     xlab = "hours")
-lines(density(daily$time, bw = .5), col = 2)
+## the data suggests that there are 2 types self identifyed videogame players:
+# frequent: daily or weekly
+# infrequent: monthly or semesterly
+# lets establish a point and interval estimate for the two groups
+frequent.ind <- which(data['freq'] == 'daily' | data['freq'] == 'weekly')
+frequent <- data[frequent.ind,]
+infrequent.ind <- which(data['freq'] == 'monthly' | data['freq'] == 'semesterly')
+infrequent <- data[infrequent.ind,]
 
-hist(weekly$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,29,30),
-     xlim = c(0,30), main = "Histogram of video game time - weekly players",
+freq.mean <- mean(frequent$time)
+freq.sd <- sd(frequent$time)
+hist(frequent$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14,29,30),
+     xlim = c(0,30), main = "Histogram of video game time - frequent players",
      xlab = "hours")
-lines(density(weekly$time, bw = .5), col = 2)
+lines(density(frequent$time), col = 2)
 
-hist(monthly$time, probability = TRUE, breaks = c(0,.1,.4,.5,1),
-     xlim = c(0,1), main = "Histogram of video game time - monthly players",
+infreq.mean <- mean(infrequent$time)
+infreq.sd <- sd(infrequent$time)
+hist(infrequent$time, probability = TRUE, breaks = c(0,.1,.4,.5,.9,1),
+     xlim = c(0,1), main = "Histogram of video game time - infrequent players",
      xlab = "hours")
-lines(density(monthly$time, bw = .05), col = 2)
+lines(density(infrequent$time), col = 2)
 
-hist(semesterly$time, probability = TRUE, breaks = c(0,.1,.4,.5,.9,1),
-     xlim = c(0,1), main = "Histogram of video game time - semesterly players",
+par(mfrow = c(1,2))
+hist(frequent$time, probability = TRUE, breaks = c(0,1,2,3,4,5,6,13,14,29,30),
+     xlim = c(0,30), main = "Histogram of video game time - frequent players",
      xlab = "hours")
-lines(density(semesterly$time, bw = .05), col = 2)
+lines(density(frequent$time), col = 2)
+hist(infrequent$time, probability = TRUE, breaks = c(0,.1,.4,.5,.9,1),
+     xlim = c(0,1), main = "Histogram of video game time - infrequent players",
+     xlab = "hours")
+lines(density(infrequent$time), col = 2)
+
+## bootstrap confidence intervals for the average amnount of time played
+
+# frequent players
+N = 314
+n = 91
+prop.freq.players.sample <- length(frequent.ind)/n
+freq.players.in.pop <- N*prop.freq.players.sample
+frequent.boot.pop <- rep(frequent$time, length.out = freq.players.in.pop) 
+B = 500
+frequent.boot.sample <- array(dim = c(B,length(frequent.ind)))
+for(i in 1:B){
+  frequent.boot.sample[i,] <- sample(frequent.boot.pop, size = length(frequent.ind), replace = FALSE)
+}
+frequent.boot.mean <- apply(X = frequent.boot.sample, MARGIN = 1, FUN = mean)
+# looking at the dist of the bootstrap sample means
+par(mfrow = c(1,2))
+hist(frequent.boot.mean, probability = TRUE, breaks = 20, xlab = "hours",
+     main = "Histogram of bootstrap sample means - frequent players")
+lines(density(frequent.boot.mean), col = 2)
+qqnorm(frequent.boot.mean)
+qqline(frequent.boot.mean, col = 2)
+avg.frequent.boot.mean <- mean(frequent.boot.mean)
+sd.frequent.boot.mean <- sd(frequent.boot.mean)
+# constructing a 95% CI for the average amount of time frequent players 
+# spent playing videogames in the week before the survey.
+# using the bootstrap distribution of sample means's quantiles and sd
+freq.mean <- mean(frequent$time)
+frequent.finite.pop.correction <- (freq.players.in.pop - length(frequent.ind))/(freq.players.in.pop - 1)
+frequent.CI.95 <- c(freq.mean - sd.frequent.boot.mean*sqrt(frequent.finite.pop.correction)*quantile(frequent.boot.mean, probs =.025), freq.mean + sd.frequent.boot.mean*sqrt(frequent.finite.pop.correction)*quantile(frequent.boot.mean, probs =.975))
+
+# infrequent players
+prop.infreq.players.sample <- length(infrequent.ind)/n
+infreq.players.in.pop <- N*prop.infreq.players.sample
+infrequent.boot.pop <- rep(infrequent$time, length.out = infreq.players.in.pop) 
+infrequent.boot.sample <- array(dim = c(B,length(infrequent.ind)))
+for(i in 1:B){
+  infrequent.boot.sample[i,] <- sample(infrequent.boot.pop, size = length(infrequent.ind), replace = FALSE)
+}
+infrequent.boot.mean <- apply(X = infrequent.boot.sample, MARGIN = 1, FUN = mean)
+# looking at the distribution of bootstrap sample means
+par(mfrow = c(1,2))
+hist(infrequent.boot.mean, probability = TRUE, xlab = "hours",
+     main = "Histogram of bootstrap sample means - infrequent players")
+lines(density(infrequent.boot.mean), col = 2)
+qqnorm(infrequent.boot.mean)
+qqline(infrequent.boot.mean, col = 2)
+avg.infrequent.boot.mean <- mean(infrequent.boot.mean)
+sd.infrequent.boot.mean <- sd(infrequent.boot.mean)
+# constructing a 95% CI for the average amount of time infrequent players 
+# spent playing videogames in the week before the survey
+# using the bootstrap distribution of sample means's quantiles and sd
+infreq.mean <- mean(infrequent$time)
+infrequent.finite.pop.correction <- (infreq.players.in.pop - length(infrequent.ind))/(infreq.players.in.pop - 1)
+infrequent.CI.95 <- c(infreq.mean - sd.infrequent.boot.mean*sqrt(infrequent.finite.pop.correction)*quantile(infrequent.boot.mean,probs=.025),infreq.mean + sd.infrequent.boot.mean*sqrt(infrequent.finite.pop.correction)*quantile(infrequent.boot.mean,probs=.975))
+
+## probability of having played a videogame (at all) in the week prior to the survey
+frequent0.ind <- which(frequent['time'] == 0)
+infrequent0.ind <- which(infrequent['time'] == 0)
+
+frequent.percent <- 1 - length(frequent0.ind)/length(frequent.ind)
+infrequent.percent <- 1 - length(infrequent0.ind)/length(infrequent.ind)
+
+## 95% CI's for the true proportion of freq or infreq players who played some videogames in the week prior to the survey
+# use the estimated prop of students who played from the sample
+# use sd estimator sqrt(phat(1-phat))/sqrt(n-1)*sqrt((N-n)/N)
+# use normal approx quantiles
+
+# Frequent players
+n <- 91
+N <- 314
+prop.freq.players.sample <- length(frequent.ind)/n
+freq.players.in.pop <- N*prop.freq.players.sample
+frequent.finite.pop.correction <- (freq.players.in.pop - length(frequent.ind))/(freq.players.in.pop)
+freq.sd <- sqrt((frequent.percent*(1-frequent.percent))/(length(frequent.ind)-1))*sqrt(frequent.finite.pop.correction)
+frequent.percent.CI.95 <- frequent.percent + c(-1,1)*freq.sd*qnorm(.975)
+
+# Infrequent players
+n <- 91
+N <- 314
+prop.infreq.players.sample <- length(infrequent.ind)/n
+infreq.players.in.pop <- N*prop.infreq.players.sample
+infrequent.finite.pop.correction <- (infreq.players.in.pop - length(infrequent.ind))/(infreq.players.in.pop)
+infreq.sd <- sqrt((infrequent.percent*(1-infrequent.percent))/(length(infrequent.ind)-1))*sqrt(infrequent.finite.pop.correction)
+infrequent.percent.CI.95 <- infrequent.percent + c(-1,1)*infreq.sd*qnorm(.975)
 
 
 # scenario 4 --------------------------------------------------------
@@ -226,34 +343,22 @@ lines(density(data$time), col = 2)
 N = 314 # population size
 n = 91 # sample size
 boot.pop <- rep(data$time, length.out = N)
-B = 5000
+B = 500
 boot.sample <- array(dim = c(B,n))
 for(i in 1:B){
   boot.sample[i, ] <- sample(boot.pop, size = n, replace = FALSE)
 }
 boot.mean <- apply(X = boot.sample, MARGIN = 1, FUN = mean)
 avg.boot.mean <- mean(boot.mean)
-std.dev.boot.mean <- sd(boot.mean) # use this as the sd of the sample mean
+std.dev.boot.mean <- sd(boot.mean)
+par(mfrow = c(1,2))
 hist(boot.mean, probability = TRUE, breaks = 20,
      main = "Histogram of bootstrap sample means", xlab = "hours")
 lines(density(boot.mean), col = 2)
-lines(density())
-
-# is this normal?
 qqnorm(boot.mean, ylab = "bootstrap sample mean quantiles",
        main = "Normal Q-Q Plot - bootstrap sample means")
 qqline(boot.mean, col = 2)
 
-# using a normal approx for a 95% CI for the mean, using the bootstrap mean and sd
-CI.95.norm <- avg.boot.mean + c(-1,1)*qnorm(.975)*std.dev.boot.mean  
-CI.95.norm.width <- qnorm(.975)*std.dev.boot.mean
-
-# using the bootstrap distribution to get a 95% CI for the mean
-boot.mean.ord <- sort(boot.mean)
-CI.95.boot <- c(boot.mean.ord[floor(.025*B)], boot.mean.ord[ceiling(.975*B)])
-CI.95.boot.lowerwidth <- avg.boot.mean - boot.mean.ord[floor(.025*B)]
-CI.95.boot.upperwidth <- boot.mean.ord[ceiling(.975*B)] - avg.boot.mean
-
-# both intervals are similar to each other (because the sample mean 
-# was a good canidate for a normal approx) 
-
+# 95% confidence interval (1.4, 1.71)hrs
+finite.pop.correction <- (N-n)/(N-1)
+CI.95 <- avg.time + std.dev.boot.mean*sqrt(finite.pop.correction)*quantile(boot.mean,probs = c(.025,.975))
