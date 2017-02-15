@@ -1,0 +1,6 @@
+setwd("C:\\Users\\Rob\\Documents\\MATH189-289\\Homework 3")
+data <- read.table("hcmv.txt", header = TRUE)
+Distance <- diff(data$location)
+hist(Distance, main="Distance Between Palindromes", prob=TRUE, breaks = 100)
+lines(density(Distance), col="blue", lwd=2)
+sum(Distance<10)
