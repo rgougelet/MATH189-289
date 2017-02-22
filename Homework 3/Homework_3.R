@@ -33,15 +33,16 @@ Weights[DoubleLocations] <- Weights[DoubleLocations] + 0.5
 DoubleSimulated <- sample.int(N, size=n, prob=Weights)
 
 
-regionsplit <- function(numOfRegions, refSeq, site){ #number of regions, reference sequence, simulated sequence
-	count.int <- table(cut(site, breaks = seq(1, length(refSeq), length.out=numOfRegions+1), include.lowest=TRUE))
-	count.vector <- as.vector(count.int)
-	count.vector
-	count.tab <- table(count.vector)
-	count.tab
-	return (count.tab)
+regionsplit <- function(data,nBreaks,nSamples,){ #number of regions, reference sequence, simulated sequence
+	IntBreaks <- seq(1, length(IntLocations), length.out=nBreaks)
+	as.vector(table(cut(DoubleSimulated,breaks=IntBreaks, include.lowest = TRUE)))
+	return()
 }
 
-regionsplit(1000, IntLocations, UniformSimulated)
+regionsplit(n, IntLocations, UniformSimulated)
 regionsplit(10, IntLocations, NormalSimulated)
 regionsplit(11, IntLocations, DoubleSimulated)
+nBreaks = 50
+nSamples = N
+IntBreaks <- seq(1, length(IntLocations), length.out=nBreaks)
+as.vector(table(cut(DoubleSimulated,breaks=IntBreaks, include.lowest = TRUE)))
