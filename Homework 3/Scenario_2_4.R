@@ -181,21 +181,7 @@ CMVInd = 75:(N-75)
 CMVStrand = numeric(N)
 CMVStrand[Location] = 1
 SlidingSum <- convolve(CMVStrand, rep(1L, 150), conj = FALSE, type = "filter")
-png("slidesum.png", units="in", height = 10, width = 15, res=300)
-	plot(SlidingSum)
+png("Sliding Palindrome Count.png", units="in", height = 10, width = 15, res=300)
+	plot(SlidingSum, main="Count of Palindromes Within 150 Base Pairs", xlab = "Location", ylab="Count", cex.lab=1.5, cex.main=1.5, cex.axis=1.5)
 dev.off()
-
-# regionsplit <- function(data,nBreaks,nSamples){ #number of regions, reference sequence, simulated sequence
-# 	IntBreaks <- seq(1, length(IntLocations), length.out=nBreaks)
-# 	as.vector(table(cut(DoubleSimulated,breaks=IntBreaks, include.lowest = TRUE)))
-# 	return()
-# }
-# 
-# regionsplit(n, IntLocations, UniformSimulated)
-# regionsplit(10, IntLocations, NormalSimulated)
-# regionsplit(11, IntLocations, DoubleSimulated)
-# nBreaks = 50
-# nSamples = N
-# IntBreaks <- seq(1, length(IntLocations), length.out=nBreaks)
-# as.vector(table(cut(DoubleSimulated,breaks=IntBreaks, include.lowest = TRUE)))
 
