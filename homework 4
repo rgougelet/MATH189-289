@@ -1,6 +1,8 @@
 ### Homework no. 4: Calibrating a Snow Gauge
 setwd("/Users/sidneybrowne/Desktop/math 189/data/hw 4")
 data <- read.table("gauge.txt", header = T)
+
+## data visualization -----------------------------------------------
 plot(data)
 
 density.686 <- data[1:10,]
@@ -30,14 +32,15 @@ boxplot(density.080$gain)
 density.001 <- data[81:90,]
 boxplot(density.001$gain)
 
-### regression 
+
+### regression - linear models --------------------------------------
 # linear x
 fit1 <- lm(gain~density, data = data)
 summary(fit1)
 plot(data)
 abline(fit1, col = 2)
 #plot(fit1)
-# residuals suggest a quadratic trend
+# residuals are very large, and suggest a quadratic trend
 plot(fit1$residuals)
 abline(a = 0, b = 0, col = 2)
 
@@ -48,8 +51,10 @@ density.squared <- density^2
 fit2 <- lm(gain~density+density.squared)
 summary(fit2)
 plot(data)
-lines(density, 405-1409*density+1275*density.squared, col = 2)
+x <- seq(from =0, to =.7, length.out = 1000)
+lines(x, 405-1409*x+1275*x^2, col = 2)
 #plot(fit2)
+# residuals are large, and have a weird "s" curve
 plot(fit2$residuals)
 abline(a = 0, b = 0, col = 2)
 
@@ -61,7 +66,31 @@ density.cubed <- density^3
 fit3 <- lm(gain~density+density.squared+density.cubed)
 summary(fit3)
 plot(data)
-lines(density, 429.373-1989.918*density+3521.061*density.squared-2186.525*density.cubed, col = 2)
+x <- seq(from =0, to =.7, length.out = 1000)
+lines(x, 429.373-1989.918*x+3521.061*x^2-2186.525*x^3, col = 2)
 #plot(fit3)
+# resisuals still larger but are smaller than the other models,
+# the spread is even suggesting normakity, and are potentially heteroscadistic
 plot(fit3$residuals)
 abline(a = 0, b = 0, col = 2)
+
+# 4th order polynomial
+gain <- data$gain
+density <- data$density
+density.squared <- density^2
+density.cubed <- density^3
+density.4th <- density^4
+fit4 <- lm(gain~density+density.squared+density.cubed+density.4th)
+summary(fit4)
+plot(data)
+x <- seq(from =0, to =.7, length.out = 1000)
+lines(x, 430.893-2072.200*x+4140.313*x^2-3652.202*x^3+1075.129*x^4, col = 2)
+# resisuals look heteroscadistidistic, more so the cubic, 
+# sizes of the residiuals are about the same as the cubic,
+# spread is even, suggsts normality
+plot(fit4$residuals)
+abline(a = 0, b = 0, col = 2)
+
+
+### regression - quantiles ------------------------------------------
+
