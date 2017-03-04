@@ -65,3 +65,26 @@ lines(density, 429.373-1989.918*density+3521.061*density.squared-2186.525*densit
 #plot(fit3)
 plot(fit3$residuals)
 abline(a = 0, b = 0, col = 2)
+
+
+### regression - quantiles ------------------------------------------
+library(quantreg)
+gain <- data$gain
+density <- data$density
+fit5.5 <- rq(gain~density, tau = .5)
+summary(fit5.5)
+fit5.25 <- rq(gain~density, tau = .25)
+summary(fit5.25)
+fit5.05 <- rq(gain~density, tau = .05)
+summary(fit5.05)
+fit5.75 <- rq(gain~density, tau = .75)
+summary(fit5.75)
+fit5.95 <- rq(gain~density, tau = .95)
+summary(fit5.95)
+plot(data)
+abline(fit5.25, col = 2)
+abline(fit5.5, col = 3)
+abline(fit5.75, col = 4)
+abline(fit5.05, col = 5)
+abline(fit5.95, col = 6)
+
