@@ -156,3 +156,19 @@ abline(fit5.75, col = 4)
 abline(fit5.05, col = 5)
 abline(fit5.95, col = 6)
 
+# log regression
+density <- data$density
+density.squared <- density^2
+gain <- data$gain
+gain.log <- log(gain)
+fitlog <- lm(gain.log~density+density.squared)
+summary(fitlog)
+gain.log
+
+x=seq(from=min(gain.log),to=max(gain.log),length.out=90)
+y=fitlog$coefficients[1]+fitlog$coefficients[2]*x+fitlog$coefficients[3]*x^2
+plot(x,y)
+y.sum = density+density.squared
+plot(gain.log~y.sum)
+matlines(x,y,lwd=2)
+

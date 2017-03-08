@@ -1,5 +1,6 @@
 ### Homework no. 4: Calibrating a Snow Gauge
-setwd("/Users/sidneybrowne/Desktop/math 189/data/hw 4")
+#setwd("/Users/sidneybrowne/Desktop/math 189/data/hw 4")
+setwd("C:\\Users\\Rob\\Documents\\MATH189-289\\Homework 4")
 data <- read.table("gauge.txt", header = T)
 plot(data)
 
@@ -65,3 +66,5 @@ lines(density, 429.373-1989.918*density+3521.061*density.squared-2186.525*densit
 #plot(fit3)
 plot(fit3$residuals)
 abline(a = 0, b = 0, col = 2)
+
+
