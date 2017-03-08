@@ -134,6 +134,30 @@ lines(x, intercept.ci[2]+gain.ci[2]*x+gainsquared.ci[2]*x^2+gaincubed.ci[2]*x^3+
 # but the bands are increasingly wide for larger gains, 
 # and it gets wider as the polynomial degree increases.
 
+# log
+density <- data$density
+gain <- data$gain
+log.gain <- log(gain)
+fit5 <- lm(density~log.gain)
+summary(fit5)
+plot(log(data$gain), data$density)
+x <- seq(from =0, to =430, length.out = 1000)
+abline(fit5$coefficients[1], fit5$coefficients[2], col = 2)
+# residuals
+plot(fit5$residuals)
+abline(a=0, b=0, col = 2)
+# looks pretty good
+# adding bands
+intercept.ci <- fit5$coefficients[1]+c(-1,1)*(0.006857)*qt(.975, df=88)
+loggain.ci <- fit5$coefficients[2]+c(-1,1)*(0.001494)*qt(.975, df=88)
+plot(log(data$gain), data$density)
+x <- seq(from =0, to =430, length.out = 1000)
+abline(a=fit5$coefficients[1], b=fit5$coefficients[2], col = 2)
+abline(a=intercept.ci[1], b=loggain.ci[1])
+abline(a=intercept.ci[2], b = loggain.ci[2])
+# this is the best fit, bands and all I've tried
+
+
 
 ### regression - quantiles ------------------------------------------
 library(quantreg)
