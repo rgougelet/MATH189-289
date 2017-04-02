@@ -642,7 +642,7 @@ subject_34.exp_1 <- ts(as.numeric(subject_34[1:120]), start = .5, end = 60, freq
 subject_34.exp_2 <- ts(as.numeric(subject_34[121:240]), start = .5, end = 60, frequency = 2)
 subject_34.exp_3 <- ts(as.numeric(subject_34[241:480]), start = .5, end = 120, frequency = 2)
 subject_34.exp_4 <- ts(as.numeric(subject_34[481:720]), start = .5, end = 120, frequency = 2)
-subject_34.exp_5 <- ts(as.numeric(subject_34[721:960]), start = .5, end = 120, frequency = 2c)
+subject_34.exp_5 <- ts(as.numeric(subject_34[721:960]), start = .5, end = 120, frequency = 2)
 subject_34.exp_6 <- ts(as.numeric(subject_34[961:1200]), start = .5, end = 120, frequency = 2)
 subject_34.exp_7 <- ts(as.numeric(subject_34[1201:1440]), start = .5, end = 120, frequency = 2)
 subject_34.exp_8 <- ts(as.numeric(subject_34[1441:1680]), start = .5, end = 120, frequency = 2)
@@ -709,6 +709,7 @@ meanS.exp_1 <- c(mean(subject_1.exp_1), mean(subject_2.exp_1), mean(subject_3.ex
                 mean(subject_34.exp_1), mean(subject_35.exp_1), mean(subject_36.exp_1))
 
 mean.exp_1 <- mean(meanS.exp_1)
+var.meanS.exp_1 <- var(meanS.exp_1)
 
 ## experiment 2
 
@@ -726,6 +727,7 @@ meanS.exp_2 <- c(mean(subject_1.exp_2), mean(subject_2.exp_2), mean(subject_3.ex
                  mean(subject_34.exp_2), mean(subject_35.exp_2), mean(subject_36.exp_2))
 
 mean.exp_2 <- mean(meanS.exp_2)
+var.meanS.exp_2 <- var(meanS.exp_2)
 
 ## experiment 3
 
@@ -743,6 +745,7 @@ meanS.exp_3 <- c(mean(subject_1.exp_3), mean(subject_2.exp_3), mean(subject_3.ex
                  mean(subject_34.exp_3), mean(subject_35.exp_3), mean(subject_36.exp_3))
 
 mean.exp_3 <- mean(meanS.exp_3)
+var.meanS.exp_3 <- var(meanS.exp_3)
 
 ## experiment 4
 
@@ -760,6 +763,7 @@ meanS.exp_4 <- c(mean(subject_1.exp_4), mean(subject_2.exp_4), mean(subject_3.ex
                  mean(subject_34.exp_4), mean(subject_35.exp_4), mean(subject_36.exp_4))
 
 mean.exp_4 <- mean(meanS.exp_4)
+var.meanS.exp_4 <- var(meanS.exp_4)
 
 ## experiment 5
 
@@ -777,6 +781,7 @@ meanS.exp_5 <- c(mean(subject_1.exp_5), mean(subject_2.exp_5), mean(subject_3.ex
                  mean(subject_34.exp_5), mean(subject_35.exp_5), mean(subject_36.exp_5))
 
 mean.exp_5 <- mean(meanS.exp_5)
+var.meanS.exp_5 <- var(meanS.exp_5)
 
 ## experiment 6
 
@@ -794,6 +799,7 @@ meanS.exp_6 <- c(mean(subject_1.exp_6), mean(subject_2.exp_6), mean(subject_3.ex
                  mean(subject_34.exp_6), mean(subject_35.exp_6), mean(subject_36.exp_6))
 
 mean.exp_6 <- mean(meanS.exp_6)
+var.meanS.exp_6 <- var(meanS.exp_6)
 
 ## experiment 7
 meanS.exp_7 <- c(mean(subject_1.exp_7), mean(subject_2.exp_7), mean(subject_3.exp_7), 
@@ -810,6 +816,7 @@ meanS.exp_7 <- c(mean(subject_1.exp_7), mean(subject_2.exp_7), mean(subject_3.ex
                  mean(subject_34.exp_7), mean(subject_35.exp_7), mean(subject_36.exp_7))
 
 mean.exp_7 <- mean(meanS.exp_7)
+var.meanS.exp_7 <- var(meanS.exp_7)
 
 ## experiment 8
 
@@ -827,6 +834,7 @@ meanS.exp_8 <- c(mean(subject_1.exp_8), mean(subject_2.exp_8), mean(subject_3.ex
                  mean(subject_34.exp_8), mean(subject_35.exp_8), mean(subject_36.exp_8))
 
 mean.exp_8 <- mean(meanS.exp_8)
+var.meanS.exp_8 <- var(meanS.exp_8)
 
 ## experiment 9
 
@@ -844,6 +852,7 @@ meanS.exp_9 <- c(mean(subject_1.exp_9), mean(subject_2.exp_9), mean(subject_3.ex
                  mean(subject_34.exp_9), mean(subject_35.exp_9), mean(subject_36.exp_9))
 
 mean.exp_9 <- mean(meanS.exp_9)
+var.meanS.exp_9 <- var(meanS.exp_9)
 
 ## experiment 10
 
@@ -861,6 +870,7 @@ meanS.exp_10 <- c(mean(subject_1.exp_10), mean(subject_2.exp_10), mean(subject_3
                  mean(subject_34.exp_10), mean(subject_35.exp_10), mean(subject_36.exp_10))
 
 mean.exp_10 <- mean(meanS.exp_10)
+var.meanS.exp_10 <- var(meanS.exp_10)
 
 ## experiment 11
 
@@ -878,6 +888,7 @@ meanS.exp_11 <- c(mean(subject_1.exp_11), mean(subject_2.exp_11), mean(subject_3
                  mean(subject_34.exp_11), mean(subject_35.exp_11), mean(subject_36.exp_11))
 
 mean.exp_11 <- mean(meanS.exp_11)
+var.meanS.exp_11 <- var(meanS.exp_11)
 
 ## experiment 12
 
@@ -895,6 +906,7 @@ meanS.exp_12 <- c(mean(subject_1.exp_12), mean(subject_2.exp_12), mean(subject_3
                  mean(subject_34.exp_12), mean(subject_35.exp_12), mean(subject_36.exp_12))
 
 mean.exp_12 <- mean(meanS.exp_2)
+var.meanS.exp_12 <- var(meanS.exp_12)
 
 ## experiment 13
 
@@ -912,6 +924,7 @@ meanS.exp_13 <- c(mean(subject_1.exp_13), mean(subject_2.exp_13), mean(subject_3
                  mean(subject_34.exp_13), mean(subject_35.exp_13), mean(subject_36.exp_13))
 
 mean.exp_13 <- mean(meanS.exp_13)
+var.meanS.exp_13 <- var(meanS.exp_13)
 
 ## experiment 14
 
@@ -929,6 +942,7 @@ meanS.exp_14 <- c(mean(subject_1.exp_14), mean(subject_2.exp_14), mean(subject_3
                  mean(subject_34.exp_14), mean(subject_35.exp_14), mean(subject_36.exp_14))
 
 mean.exp_14 <- mean(meanS.exp_14)
+var.meanS.exp_14 <- var(meanS.exp_14)
 
 ## histograms of means for each experiment ------------------------------------
 
@@ -951,16 +965,27 @@ hist(meanS.exp_14)
 
 meanS.baseline_open <- c(meanS.exp_1)
 mean.baseline_open<- mean(meanS.baseline_open)
+var.meanS.baseline_open <- var(meanS.baseline_open)
+
 meanS.baseline_closed <- c(meanS.exp_2)
 mean.baseline_closed <- mean(meanS.baseline_closed)
+var.meanS.baseline_closed <- var(meanS.baseline_closed)
+
 meanS.task_1 <- c(meanS.exp_3, meanS.exp_7, meanS.exp_11)
 mean.task_1 <- mean(meanS.task_1)
+var.meanS.task_1 <- var(meanS.task_1)
+
 meanS.task_2 <- c(meanS.exp_4, meanS.exp_8, meanS.exp_12)
 mean.task_2 <- mean(meanS.task_2)
+var.meanS.task_2 <- var(meanS.task_2)
+
 meanS.task_3 <- c(meanS.exp_5, meanS.exp_9, meanS.exp_13)
 mean.task_3 <- mean(meanS.task_3)
+var.meanS.task_3 <- var(meanS.task_3)
+
 meanS.task_4 <- c(meanS.exp_6, meanS.exp_10, meanS.exp_14)
 mean.task_4 <- mean(meanS.task_4)
+var.meanS.task_4 <- var(meanS.task_4)
 
 ## Questions to ask: ----------------------------------------------------------
 # what kind of distribution do the means have? are they all the same?
@@ -973,12 +998,46 @@ mean.task_4 <- mean(meanS.task_4)
 #    task 1,2 is right vs left, real vs imagined
 #    task 3,4 is hands vs feet, real vs imagined
 
+## Current observations: ------------------------------------------------------
+# the mean of the average alpha power for each task were:
+#     baseline open: 2.34, baseline closed: 3.21,
+#     task 1: 2.60, task 2: 2.73, task 3: 2.62, task 4: 2.81
+# Will need distribution and var, but looks like we could tell the difference between 
+#     eyes open, closed, real task (1,3), and imaginary task (2,4).
+# The variances of the samples for the average alpha power for each task were:
+#     baseline open: .64, baseline closed: 1.74,
+#     task 1: .86, task 2: 1.04, task 3: .87, task 4: 1.21
+# The same pattern as the means occurs here, I think we can show that we can distinguish 
+#     between types of experiment.
+
+## Looking at distribution ----------------------------------------------------
+
 hist(meanS.baseline_open)
 hist(meanS.baseline_closed)
 hist(meanS.task_1, breaks = 20)
 hist(meanS.task_2, breaks = 20)
 hist(meanS.task_3, breaks = 20)
 hist(meanS.task_4, breaks = 20)
+
+## baselines: open, closed (can see closed has larger mean than open)
+qqplot(meanS.baseline_open, meanS.baseline_closed)
+abline(a=0, b=1, col=2)
+
+## real movement tasks 1,3 (very good match, distributions of reak mvmnt look alike)
+qqplot(meanS.task_1, meanS.task_3)
+abline(a=0, b=1, col=2)
+
+## imaginary movement tasks 2,4 (good match distributions look alike)
+qqplot(meanS.task_2, meanS.task_4)
+abline(a=0, b=1, col=2)
+
+## left vs right tasks (1,2) (fairly good match imaginary may have slightly higher mean)
+qqplot(meanS.task_1, meanS.task_2)
+abline(a=0, b=1, col=2)
+
+## hands vs feet tasks (3,4) (fairly good match imaginary may have slightly higher mean)
+qqplot(meanS.task_3, meanS.task_4)
+abline(a=0, b=1, col=2)
 
 
 ### Variances experiments 1 thru 14 -------------------------------------------
@@ -999,6 +1058,7 @@ varS.exp_1 <- c(var(subject_1.exp_1), var(subject_2.exp_1), var(subject_3.exp_1)
                 var(subject_34.exp_1), var(subject_35.exp_1), var(subject_36.exp_1))
 
 var.exp_1 <- var(varS.exp_1)
+avg.var.exp_1 <- mean(varS.exp_1)
 
 ## experiment 2
 
@@ -1016,6 +1076,7 @@ varS.exp_2 <- c(var(subject_1.exp_2), var(subject_2.exp_2), var(subject_3.exp_2)
                 var(subject_34.exp_2), var(subject_35.exp_2), var(subject_36.exp_2))
 
 var.exp_2 <- var(varS.exp_2)
+avg.var.exp_2 <- mean(varS.exp_2)
 
 ## experiment 3
 
@@ -1033,6 +1094,7 @@ varS.exp_3 <- c(var(subject_1.exp_3), var(subject_2.exp_3), var(subject_3.exp_3)
                 var(subject_34.exp_3), var(subject_35.exp_3), var(subject_36.exp_3))
 
 var.exp_3 <- var(varS.exp_3)
+avg.var.exp_3 <- mean(varS.exp_3)
 
 ## experiment 4
 
@@ -1050,6 +1112,7 @@ varS.exp_4 <- c(var(subject_1.exp_4), var(subject_2.exp_4), var(subject_3.exp_4)
                 var(subject_34.exp_4), var(subject_35.exp_4), var(subject_36.exp_4))
 
 var.exp_4 <- var(varS.exp_4)
+avg.var.exp_4 <- mean(varS.exp_4)
 
 ## experiment 5
 
@@ -1067,6 +1130,7 @@ varS.exp_5 <- c(var(subject_1.exp_5), var(subject_2.exp_5), var(subject_3.exp_5)
                 var(subject_34.exp_5), var(subject_35.exp_5), var(subject_36.exp_5))
 
 var.exp_5 <- var(varS.exp_5)
+avg.var.exp_5 <- mean(varS.exp_5)
 
 ## experiment 6
 
@@ -1084,6 +1148,7 @@ varS.exp_6 <- c(var(subject_1.exp_6), var(subject_2.exp_6), var(subject_3.exp_6)
                 var(subject_34.exp_6), var(subject_35.exp_6), var(subject_36.exp_6))
 
 var.exp_6 <- var(varS.exp_6)
+avg.var.exp_6 <- mean(varS.exp_6)
 
 ## experiment 7
 varS.exp_7 <- c(var(subject_1.exp_7), var(subject_2.exp_7), var(subject_3.exp_7), 
@@ -1100,6 +1165,7 @@ varS.exp_7 <- c(var(subject_1.exp_7), var(subject_2.exp_7), var(subject_3.exp_7)
                 var(subject_34.exp_7), var(subject_35.exp_7), var(subject_36.exp_7))
 
 var.exp_7 <- var(varS.exp_7)
+avg.var.exp_7 <- mean(varS.exp_7)
 
 ## experiment 8
 
@@ -1117,6 +1183,7 @@ varS.exp_8 <- c(var(subject_1.exp_8), var(subject_2.exp_8), var(subject_3.exp_8)
                 var(subject_34.exp_8), var(subject_35.exp_8), var(subject_36.exp_8))
 
 var.exp_8 <- var(varS.exp_8)
+avg.var.exp_8 <- mean(varS.exp_8)
 
 ## experiment 9
 
@@ -1134,6 +1201,7 @@ varS.exp_9 <- c(var(subject_1.exp_9), var(subject_2.exp_9), var(subject_3.exp_9)
                 var(subject_34.exp_9), var(subject_35.exp_9), var(subject_36.exp_9))
 
 var.exp_9 <- var(varS.exp_9)
+avg.var.exp_9 <- mean(varS.exp_9)
 
 ## experiment 10
 
@@ -1151,6 +1219,7 @@ varS.exp_10 <- c(var(subject_1.exp_10), var(subject_2.exp_10), var(subject_3.exp
                  var(subject_34.exp_10), var(subject_35.exp_10), var(subject_36.exp_10))
 
 var.exp_10 <- var(varS.exp_10)
+avg.var.exp_10 <- mean(varS.exp_10)
 
 ## experiment 11
 
@@ -1168,6 +1237,7 @@ varS.exp_11 <- c(var(subject_1.exp_11), var(subject_2.exp_11), var(subject_3.exp
                  var(subject_34.exp_11), var(subject_35.exp_11), var(subject_36.exp_11))
 
 var.exp_11 <- var(varS.exp_11)
+avg.var.exp_11 <- mean(varS.exp_11)
 
 ## experiment 12
 
@@ -1185,6 +1255,7 @@ varS.exp_12 <- c(var(subject_1.exp_12), var(subject_2.exp_12), var(subject_3.exp
                  var(subject_34.exp_12), var(subject_35.exp_12), var(subject_36.exp_12))
 
 var.exp_12 <- var(varS.exp_2)
+avg.var.exp_12 <- mean(varS.exp_12)
 
 ## experiment 13
 
@@ -1202,6 +1273,7 @@ varS.exp_13 <- c(var(subject_1.exp_13), var(subject_2.exp_13), var(subject_3.exp
                  var(subject_34.exp_13), var(subject_35.exp_13), var(subject_36.exp_13))
 
 var.exp_13 <- var(varS.exp_13)
+avg.var.exp_13 <- mean(varS.exp_13)
 
 ## experiment 14
 varS.exp_14 <- c(var(subject_1.exp_14), mean(subject_2.exp_14), var(subject_3.exp_14), 
@@ -1218,6 +1290,7 @@ varS.exp_14 <- c(var(subject_1.exp_14), mean(subject_2.exp_14), var(subject_3.ex
                  var(subject_34.exp_14), mean(subject_35.exp_14), var(subject_36.exp_14))
 
 var.exp_14 <- var(varS.exp_14)
+avg.var.exp_14 <- mean(varS.exp_14)
 
 ## histograms of variances for experiments 1 thru 14 --------------------------
 
@@ -1239,16 +1312,27 @@ hist(varS.exp_14, breaks = 20)
 ## organizing variances by "task" baseline, 1, 2, 3, 4 ------------------------------------
 varS.baseline_open <- c(varS.exp_1)
 var.baseline_open <- var(varS.baseline_open)
+avg.var.baseline_open <- mean(varS.baseline_open)
+
 varS.baseline_closed <- c(varS.exp_2)
 var.baseline_closed <- var(varS.baseline_closed)
+avg.var.baseline_closed <- mean(varS.baseline_closed)
+
 varS.task_1 <- c(varS.exp_3, varS.exp_7, varS.exp_11)
 var.task_1 <- var(varS.task_1)
+avg.var.task_1 <- mean(varS.task_1)
+
 varS.task_2 <- c(varS.exp_4, varS.exp_8, varS.exp_12)
 var.task_2 <- var(varS.task_2)
+avg.var.task_2 <- mean(varS.task_2)
+
 varS.task_3 <- c(varS.exp_5, varS.exp_9, varS.exp_13)
 var.task_3 <- var(varS.task_3)
+avg.var.task_3 <- mean(varS.task_3)
+
 varS.task_4 <- c(varS.exp_6, varS.exp_10, varS.exp_14)
 var.task_4 <- var(varS.task_4)
+avg.var.task_4 <- mean(varS.task_4)
 
 ## Questions to ask: ----------------------------------------------------------
 # What kind of distribution would we use to describe the various baselines and tests?
@@ -1259,6 +1343,8 @@ var.task_4 <- var(varS.task_4)
 # Same as means, should the vars for each person be averaged first, 
 #     then a group average taken.
 
+# Looking at distribution -----------------------------------------------------
+
 hist(varS.baseline_open)
 hist(varS.baseline_closed)
 hist(varS.task_1, breaks = 20)
@@ -1266,7 +1352,79 @@ hist(varS.task_2, breaks = 20)
 hist(varS.task_3, breaks = 20)
 hist(varS.task_4, breaks = 20)
 
+## baselines (a meh match, can almost see that closed variances have a higher avg than open)
+qqplot(varS.baseline_open, varS.baseline_closed)
+abline(a=0, b=1, col=2)
+
+## real tasks (1,3) (a pretty good match)
+qqplot(varS.task_1, varS.task_3)
+abline(a=0, b=1, col=2)
+
+# imaginary tasks (2,4) (a pretty good match)
+qqplot(varS.task_2, varS.task_4)
+abline(a=0, b=1, col=2)
+
+# left vs right tests (1,2) (good below 5, then imaginary tends to have larger variances)
+qqplot(varS.task_1, varS.task_2)
+abline(a=0, b=1, col=2)
+
+# hands vs feet tests (3,4) (good below 7ish, then imaginary tends to have larger variances)
+qqplot(varS.task_3, varS.task_4)
+abline(a=0, b=1, col=2)
+
+# real movement vs baseline open:
+#     (open,1) (bad match)
+qqplot(varS.baseline_open, varS.task_1)
+abline(a=0, b=1, col=2)
+
+#     (open,3) (bad match)
+qqplot(varS.baseline_open, varS.task_3)
+abline(a=0, b=1, col=2)
+
+# real movement vs baseline closed:
+#     (closed,1) (bad match)
+qqplot(varS.baseline_closed, varS.task_1)
+abline(a=0, b=1, col=2)
+
+#     (closed,3) (bad match)
+qqplot(varS.baseline_closed, varS.task_3)
+abline(a=0, b=1, col=2)
+
+# imaginary movement vs baseline open:
+#     (2,open) (bad match)
+qqplot(varS.baseline_open, varS.task_2)
+abline(a=0, b=1, col=2)
+
+#     (4,open) (bad match)
+qqplot(varS.baseline_open, varS.task_4)
+abline(a=0, b=1, col=2)
+
+# iamginary movement vs baseline closed:
+#     (closed,2) (bad match)
+qqplot(varS.baseline_closed, varS.task_2)
+abline(a=0, b=1, col=2)
+
+#     (closed,4) (bad match)
+qqplot(varS.baseline_closed, varS.task_4)
+abline(a=0, b=1, col=2)
+
 ### time series plots ---------------------------------------------------------
 
-plot.ts(subject_1.exp_1)
+plot(subject_1.exp_2)
+lines(subject_1.exp_1, col = 2)
+lines(subject_2.exp_1, col = 2)
+lines(subject_3.exp_1, col = 2)
+#lines(subject_4.exp_1, col = 2)
+#lines(subject_5.exp_1, col = 2)
+#lines(subject_6.exp_1, col = 2)
+#lines(subject_7.exp_1, col = 2)
+lines(subject_2.exp_2)
+lines(subject_3.exp_2)
+#lines(subject_4.exp_2)
+#lines(subject_5.exp_2)
+#lines(subject_6.exp_2)
+#lines(subject_7.exp_2)
+
+plot(subject_1.exp_3)
+lines(subject_1.exp_4)
 
