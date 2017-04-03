@@ -141,7 +141,7 @@ log.gain <- log(gain)
 fit5 <- lm(density~log.gain)
 summary(fit5)
 plot(log(data$gain), data$density)
-x <- seq(from =0, to =430, length.out = 1000)
+#x <- seq(from =0, to =430, length.out = 1000)
 abline(fit5$coefficients[1], fit5$coefficients[2], col = 2)
 # residuals
 plot(fit5$residuals)
@@ -180,19 +180,86 @@ abline(fit5.75, col = 4)
 abline(fit5.05, col = 5)
 abline(fit5.95, col = 6)
 
-# log regression
-density <- data$density
-density.squared <- density^2
-gain <- data$gain
-gain.log <- log(gain)
-fitlog <- lm(gain.log~density+density.squared)
-summary(fitlog)
-gain.log
+# Log regression 2nd order model
+x1 <- data$density
+x2 <- x1^2
+x = x1+x2
+y <- data$gain
 
-x=seq(from=min(gain.log),to=max(gain.log),length.out=90)
-y=fitlog$coefficients[1]+fitlog$coefficients[2]*x+fitlog$coefficients[3]*x^2
-plot(x,y)
-y.sum = density+density.squared
-plot(gain.log~y.sum)
-matlines(x,y,lwd=2)
+plot(log(y)~x1, xlab="Density",ylab="Log Gain")
+density = seq(from=max(x1,na.rm = TRUE),to=min(x1,na.rm = TRUE),length.out=900)
+loggain=logfit$coefficients[1]+logfit$coefficients[2]*density
+lines(density,loggain)
+stdErrors = coef(summary(logfit))[, 2]
+intercept.ci <- logfit$coefficients[1]+c(-1,1)*(stdErrors[1])*qt(.975, df=logfit$df.residual)
+x1.ci <- logfit$coefficients[2]+c(-1,1)*(stdErrors[2])*qt(.975, df=logfit$df.residual)
+loggain.upper = intercept.ci[1]+x1.ci[1]*density
+lines(density,loggain.upper, col="red")
+loggain.lower = intercept.ci[2]+x1.ci[2]*density
+lines(density,loggain.lower, col="red")
+
+plot(log(y)~x, xlab="Density",ylab="Log Gain")
+densitySquaredLogFit <- lm(log(y)~x)
+summary(densitySquaredLogFit)
+densitySquaredLogFit.seq = seq(from=max(x),to=min(x),length.out=900)
+densitySquaredLogFit.predict=densitySquaredLogFit$coefficients[1]+densitySquaredLogFit$coefficients[2]*densitySquaredLogFit.seq
+lines(densitySquaredLogFit.seq,densitySquaredLogFit.predict)
+
+# Log regression cross-validation
+x1 <- data$density
+y <- data$gain
+#y[x1==0.508] <-NA
+#x1[x1==0.508] <-NA
+logfit <- lm(log(y)~x1)
+summary(logfit)
+
+# Log plot of solution
+#use density to predict log gain
+density = seq(from=max(x1,na.rm = TRUE),to=min(x1,na.rm = TRUE),length.out=90000)
+#predict log gain
+loggain=logfit$coefficients[1]+logfit$coefficients[2]*density
+stdErrors = coef(summary(logfit))[, 2]
+intercept.ci <- logfit$coefficients[1]+c(-1,1)*(stdErrors[1])*qt(.975, df=logfit$df.residual)
+x1.ci <- logfit$coefficients[2]+c(-1,1)*(stdErrors[2])*qt(.975, df=logfit$df.residual)
+#predict log gain conf intervals
+loggain.upper = intercept.ci[1]+x1.ci[1]*density
+loggain.lower = intercept.ci[2]+x1.ci[2]*density
+
+#invert log gain target to find the density that predicted it
+loggain.target = 2.63
+which(abs(loggain.upper-loggain.target)==min(abs(loggain.upper-loggain.target)))
+which(abs(loggain.lower-loggain.target)==min(abs(loggain.lower-loggain.target)))
+min(loggain.lower)
+density[which(abs(loggain.upper-loggain.target)==min(abs(loggain.upper-loggain.target)))]
+density[which(abs(loggain.lower-loggain.target)==min(abs(loggain.lower-loggain.target)))]
+
+png("Log Plot.png", units="in", height = 10, width = 15, res=300)
+	plot(log(y)~x1, xlab="Density",ylab="Log Gain", main="Log Transformed Gain Regression Model", cex.main=1.5, cex.lab=1.5, cex.axis=1.5)
+	lines(density,loggain)
+	lines(density,loggain.upper, col="red")
+	lines(density,loggain.lower, col="red")
+dev.off()
+
+# Inverse plot of solution
+idpu = exp(loggain)-logfit$coefficients[1]/logfit$coefficients[2]
+idpu1 = exp(loggain.upper)-intercept.ci[1]/x1.ci[1]
+idpu2 = exp(loggain.lower)-intercept.ci[2]/x1.ci[2]
+gain.target = 38.6
+which(abs(idpu1-gain.target)==min(abs(idpu1-gain.target)))
+which(abs(idpu2-gain.target)==min(abs(idpu2-gain.target)))
+density[which(abs(idpu1-gain.target)==min(abs(idpu1-gain.target)))]
+density[which(abs(idpu2-gain.target)==min(abs(idpu2-gain.target)))]
+gain.target = 426.7
+which(abs(idpu1-gain.target)==min(abs(idpu1-gain.target)))
+which(abs(idpu2-gain.target)==min(abs(idpu2-gain.target)))
+density[which(abs(idpu1-gain.target)==min(abs(idpu1-gain.target)))]
+density[which(abs(idpu2-gain.target)==min(abs(idpu2-gain.target)))]
+
+png("Inverse Plot.png", units="in", height = 10, width = 15, res=300)
+	plot(x1~y, xlab="Gain",ylab="Density", main="Look-Up Graph of Logarithmic Model", cex.main=1.5, cex.lab=1.5, cex.axis=1.5) # this is the plot we ultimately want
+	lines(idpu,density, col="black")
+	lines(idpu1,density, col="red")
+	lines(idpu2,density, col="red")
+	grid(40,40, lwd=2.5)
+dev.off()
 
