@@ -284,8 +284,14 @@ abline(a=0, b=1, col=2)
 
 ## boxplots for the distribution of alpha freq for each exp -------------------
 
+## each experiment gets its own boxplot
+
 subject_no <- 1:109
 subject_no <- subject_no[-c(50, 79, 104, 106, 109)]
+
+pdf("bplots_relative_alpha_power_2.pdf", height = 11, width = 8)
+
+par(mfrow = c(3,1))
 
 for(subjn in subject_no){
   eval(parse(text = paste("boxplot(subject_",subjn,".exp_1, subject_",subjn,".exp_2, subject_",subjn,".exp_3,
@@ -296,10 +302,9 @@ for(subjn in subject_no){
                           xlab = 'experiment number',ylab = 'relative alpha power')", sep = "")))
 }
 
+dev.off()
 
-
-
-
-
+par(mfrow = c(1,1))
+  
 
 
