@@ -1,7 +1,7 @@
 ## final project
 library(readxl)
 
-Relative_Alpha_Power_data <- read_excel("~/Desktop/math 189/final project/Relative Alpha Power.xlsx", sheet 
+Relative_Alpha_Power_data <- read_excel("~/Desktop/math 189/final project/Relative Alpha Power_ICA.xlsx", sheet 
                                         = "Sheet1", col_names = TRUE)
 
 
