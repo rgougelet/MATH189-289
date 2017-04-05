@@ -8,7 +8,7 @@ Relative_Alpha_Power_data <- read_excel("~/Desktop/math 189/final project/Relati
 ### experiment time series for subjects 1 thru 36, experiments 1 thru 14 ------
 
 subject_no <- 1:109
-subject_no <- subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 104, 106, 109)]
 
 for(subjn in subject_no){
   eval(parse(text = paste("subject_",subjn," <- t(Relative_Alpha_Power_data[",subjn,",])", sep ="")))
@@ -34,7 +34,7 @@ for(subjn in subject_no){
 ### means for experiments 1 thru 14 -------------------------------------------
 
 subject_no <- 1:109
-subject_no <- subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 104, 106, 109)]
 experiment_no <- 1:14
 
 for(expn in experiment_no){
@@ -144,13 +144,13 @@ abline(a=0, b=1, col=2)
 ### Variances experiments 1 thru 14 -------------------------------------------
 
 subject_no <- 1:109
-subject_no <- subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 104, 106, 109)]
 experiment_no <- 1:14
 
 for(expn in experiment_no){
   eval(parse(text = paste("varS.exp_",expn," <- rep(0, length(subject_no))", sep = "")))
   for(subjn in subject_no){
-    eval(parse(text = paste("varS.exp_",expn,"[",subjn,"] <- var(subject_",subjn,".exp_",expn,")")))
+    eval(parse(text = paste("varS.exp_",expn,"[",subjn,"] <- var(subject_",subjn,".exp_",expn,")", sep = "")))
   }
   eval(parse(text = paste("avg.var.exp_",expn," <- mean(varS.exp_",expn,")", sep = "")))
   eval(parse(text = paste("var.varS.exp_",expn," <- var(varS.exp_",expn,")", sep = "")))
@@ -281,3 +281,25 @@ abline(a=0, b=1, col=2)
 #     (closed,4) (bad match)
 qqplot(varS.baseline_closed, varS.task_4)
 abline(a=0, b=1, col=2)
+
+## boxplots for the distribution of alpha freq for each exp -------------------
+
+subject_no <- 1:109
+subject_no <- subject_no[-c(50, 79, 104, 106, 109)]
+
+for(subjn in subject_no){
+  eval(parse(text = paste("boxplot(subject_",subjn,".exp_1, subject_",subjn,".exp_2, subject_",subjn,".exp_3,
+          subject_",subjn,".exp_4, subject_",subjn,".exp_5, subject_",subjn,".exp_6,
+          subject_",subjn,".exp_7, subject_",subjn,".exp_8, subject_",subjn,".exp_9,
+          subject_",subjn,".exp_10, subject_",subjn,".exp_11, subject_",subjn,".exp_12,
+          subject_",subjn,".exp_13, subject_",subjn,".exp_14, main = 'subject ",subjn,"', 
+                          xlab = 'experiment number',ylab = 'relative alpha power')", sep = "")))
+}
+
+
+
+
+
+
+
+
