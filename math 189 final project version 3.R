@@ -8,7 +8,7 @@ Relative_Alpha_Power_data <- read_excel("~/Desktop/math 189/final project/Relati
 ### experiment time series for subjects 1 thru 36, experiments 1 thru 14 ------
 
 subject_no <- 1:109
-subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 109)]
 
 for(subjn in subject_no){
   eval(parse(text = paste("subject_",subjn," <- t(Relative_Alpha_Power_data[",subjn,",])", sep ="")))
@@ -34,7 +34,7 @@ for(subjn in subject_no){
 ### means for experiments 1 thru 14 -------------------------------------------
 
 subject_no <- 1:109
-subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 109)]
 experiment_no <- 1:14
 
 for(expn in experiment_no){
@@ -144,7 +144,7 @@ abline(a=0, b=1, col=2)
 ### Variances experiments 1 thru 14 -------------------------------------------
 
 subject_no <- 1:109
-subject_no[-c(50, 79, 109)]
+subject_no <- subject_no[-c(50, 79, 109)]
 experiment_no <- 1:14
 
 for(expn in experiment_no){
